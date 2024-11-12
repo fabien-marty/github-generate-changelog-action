@@ -1,0 +1,74 @@
+name: 'Make changelog from git tags and GitHub merged PRs'
+description: 'Make a changelog (keepachangelog format) from local git tags and GitHub merged PRs. You can provide your own template.'
+branding:
+  icon: 'git-pull-request'
+  color: 'blue'
+inputs:
+  github-token:
+    description: "GitHub Token"
+    required: true
+  log-level:
+    description: 'Log Level (DEBUG, INFO, WARNING)'
+    required: false
+    default: 'INFO'
+  ignore-labels:
+    description: 'Coma separated list of PR labels to consider as ignored PRs (OR condition)'
+    required: false
+    default: 'Type: Hidden'
+  must-have-labels:
+    description: 'Coma separated list of PR labels that PRs must have to be considered (OR condition, empty => no filtering)'
+    required: false
+    default: ''
+  repository:
+    description: "Repository (format: owner/repo_name)"
+    required: true
+  tag-regex:
+    description: "Regex to match tags"
+    required: false
+    default: ''
+  consider-also-non-merged-prs:
+    description: "Consider also non-merged PRs"
+    required: false
+    default: 'false'
+  ignore-prereleases:
+    description: "if set to true, ignore prereleases in the changelog"
+    required: false
+    default: 'false'
+  future:
+    description: "if set to true, ignore prereleases in the changelog"
+    required: false
+    default: 'false'
+  branches:
+    description: "Coma separated list of branch names to filter on for getting tags and prs (if not set, the default branch is guessed/used)"
+    required: false
+    default: ''
+  template-path:
+    description: "Path to the changelog template"
+    required: false
+    default: ''
+  starting-tag:
+    description: "Starting tag for changelog generation"
+    required: false
+    default: ''
+  changelog-path:
+    description: "Path to the changelog file"
+    required: false
+    default: 'CHANGELOG.md'
+outputs:
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    LOG_LEVEL: ${{ inputs.log-level }}
+    GITHUB_TOKEN: ${{ inputs.github-token }}
+    GITHUB_REPOSITORY: ${{ inputs.repository }}
+    GNSV_IGNORE_LABELS: ${{ inputs.ignore-labels }}
+    GNSV_MUST_HAVE_LABELS: ${{ inputs.must-have-labels }}
+    GNSV_CONSIDER_ALSO_NON_MERGED_PRS: ${{ inputs.consider-also-non-merged-prs }}
+    GNSV_TAG_REGEX: ${{ inputs.tag-regex }}
+    GNSV_IGNORE_PRERELEASES: ${{ inputs.ignore-prereleases }}
+    GNSV_FUTURE: ${{ inputs.future }}
+    GNSV_BRANCHES: ${{ inputs.branches }}
+    GNVS_CHANGELOG_TEMPLATE_PATH: ${{ inputs.template-path }}
+    GNSV_CHANGELOG_STARTING_TAG: ${{ inputs.starting-tag }}
+    CHANGELOG_PATH: ${{ inputs.changelog-path }}
