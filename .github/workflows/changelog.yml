@@ -1,4 +1,4 @@
-name: CI
+name: Changelog
 
 on:
   push:
@@ -15,8 +15,12 @@ jobs:
           fetch-depth: 0 # we need this because fetch-tags=true and because of a GHA bug:
           fetch-tags: true
 
-      - id: make-release
-        uses: fabien-marty/github-generate-changelog@main
+      - name: Generate Changelog
+        uses: fabien-marty/github-generate-changelog-action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           log-level: 'DEBUG'
+
+      - name: Debug Changelog
+        run: |
+          cat CHANGELOG.md

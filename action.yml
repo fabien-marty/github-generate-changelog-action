@@ -54,7 +54,6 @@ inputs:
     description: "Path to the changelog file"
     required: false
     default: 'CHANGELOG.md'
-outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
