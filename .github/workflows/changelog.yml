@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  changelog:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # we need this because fetch-tags=true and because of a GHA bug:
+          fetch-tags: true
+
+      - id: make-release
+        uses: fabien-marty/github-generate-changelog@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          log-level: 'DEBUG'
